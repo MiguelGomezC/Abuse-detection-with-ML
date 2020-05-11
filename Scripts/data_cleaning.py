@@ -1,7 +1,7 @@
 import spacy
 import json
 import re
-import random
+from nltk.corpus import stopwords
 
 with open('abusedetection_dataset') as fichero:
     datos = json.load(fichero)
@@ -18,13 +18,13 @@ def datacleaner(text):
         else:
             sc_removed = re.sub("[^a-zñáéíóúäëïöü]", '', str(t.lemma_))
             if len(sc_removed) > 1:
-                final_tokens.append(sc_removed)
+                if not sc_removed in stopwords.words('spanish'):
+                    final_tokens.append(sc_removed)
     joined = ' '.join(final_tokens)
     spell_corrected = re.sub(r'(.)\1+', r'\1\1', joined)
     return spell_corrected
 
 datos_clean = [[datacleaner(line[0]),line[1],line[2]] for line in datos]
-random.shuffle(datos_clean)
 
 with open('clean_data','w') as ficherosalida:
     json.dump(datos_clean, ficherosalida)
