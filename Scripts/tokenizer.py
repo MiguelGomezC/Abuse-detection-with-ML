@@ -1,7 +1,7 @@
 import json
 import pandas as pd
 import numpy as np
-from TexTimeVectorizer import TexTimeVectorizer as ttv
+#from TextTimeVectorizer import TexTimeVectorizer as ttv
 
 with open('clean_data','r') as fichero:
     data = json.load(fichero)
@@ -10,7 +10,7 @@ df = pd.DataFrame(data, columns = ["text","time class", "sentiment"])
 from sklearn.model_selection import StratifiedKFold
 from sklearn.metrics import precision_score, recall_score, f1_score
 
-def classification(n_splits, X, Y, vectorizer, pipeline, average_method):
+def classification(n_splits, X, Y, pipeline, average_method):
     """
     X: 2 column array containing the text and time classes
     """
@@ -25,7 +25,7 @@ def classification(n_splits, X, Y, vectorizer, pipeline, average_method):
         scores = model_fit.score(X[test],Y[test])
         accuracy.append(scores * 100)
         precision.append(precision_score(Y[test], prediction, average=average_method)*100)
-        print('              negative    neutral     positive')
+        print('              neutral     positive')
         print('precision:',precision_score(Y[test], prediction, average=None))
         recall.append(recall_score(Y[test], prediction, average=average_method)*100)
         print('recall:   ',recall_score(Y[test], prediction, average=None))
