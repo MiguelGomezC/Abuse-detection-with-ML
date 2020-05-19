@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 
 with open('clean_data','r') as fichero:
     data = json.load(fichero)
-df = pd.DataFrame(data, columns = ["text","time_class", "sentiment"])
-X = df[['text','time_class']]
+df = pd.DataFrame(data, columns = ["text","time_feature", "sentiment"])
+X = df[['text','time_feature']]
 Y = df['sentiment']
 
 from sklearn.model_selection import StratifiedKFold
@@ -54,7 +54,7 @@ def classification(pipeline, n_splits=5, X=X, Y=Y, average_method = 'macro'):
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.compose import ColumnTransformer
-ct = ColumnTransformer([("Scaler",MinMaxScaler(), ['time_class']),\
+ct = ColumnTransformer([("Scaler",MinMaxScaler(), ['time_feature']),\
                         ("Tfidfvectorizer", TfidfVectorizer(ngram_range=(1,3), max_features=100000),'text')])
 
 from sklearn.linear_model import LogisticRegression
