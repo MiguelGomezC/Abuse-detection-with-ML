@@ -1,10 +1,20 @@
+import pandas as pd
 import numpy as np
+import seaborn as sn
+import matplotlib.pyplot as plt
 """
 from imblearn.pipeline import Pipeline
 from imblearn.over_sampling import SMOTE, RandomOverSampler
 ros = RandomOverSampler(random_state=777)
 smote = SMOTE(random_state=777)
 """
+import json
+with open('clean_data','r') as fichero:
+    data = json.load(fichero)
+df = pd.DataFrame(data, columns = ["text","time_feature", "sentiment"])
+X = df[['text','time_feature']]
+Y = df['sentiment']
+
 from sklearn.pipeline import Pipeline
 
 from sklearn.preprocessing import MinMaxScaler
@@ -19,12 +29,31 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from sklearn.naive_bayes import MultinomialNB
-from sklearn.grid_search import GridSearchCV
+from sklearn.model_selection import GridSearchCV #REFIT=TRUE?
+#probar gradient boost, adaptative boost
 
-pipe = Pipeline([('coltrans', ct), ('classifier', LogisticRegression())])
+def pipe(obj):
+    obj = classifiers[obj]['classifier'][0]
+    return Pipeline([('coltrans', ct), ('classifier', obj)])
 
-classifiers = {'logistic regression': {'classifier':[LogisticRegression()], 'classifier__penalty' : ['l1', 'l2'], 'classifier_C' : np.logspace(-4, 4, 20)},\
+classifiers = {'LogisticRegression': {'classifier':[LogisticRegression()], 'classifier__penalty' : ['l1', 'l2'], 'classifier_C' : np.logspace(-4, 4, 20)},\
                'MultinomialNB': {'classifier': [MultinomialNB()], 'classifier__alpha': [0.01, 0.1, 1.0]},\
-               'KNeigboursClassifier': {'classifier': [KNeighborsClassifier()], 'classifier__n_neighbors': [3, 7, 10], 'classifier__weights': ['uniform', 'distance']},\
-               'SVC': {'classifier': [SVC()], }
-               
+               'KNeigboursClassifier': {'classifier': [KNeighborsClassifier()], 'classifier__n_neighbors': [3, 7, 10, 20, 30, 40, 50], 'classifier__weights': ['uniform', 'distance']},\
+               'SVC': {'classifier': [SVC()],'classifier__C':[1,10,100,1000],'classifier__gamma':[1,0.1,0.001,0.0001], 'classifier__kernel':['linear','rbf']},\
+               'RandomForestClassifier':{'classifier':[RandomForestClassifier()],'classifier__bootstrap': [True],'classifier__max_depth': [80, 90, 100, 110], 'classifier__max_features': [2, 3],'classifier__min_samples_leaf': [3, 4, 5],'classifier__min_samples_split': [8, 10, 12],'classifier__n_estimators': [100, 200, 300, 1000]}}
+
+from sklearn.model_selection import StratifiedKFold
+from sklearn.metrics import precision_score, recall_score, f1_score
+
+def grid_search(classifier):
+    """
+    (Returns best estimator)
+    --NO RESAMPLING--
+    """
+    param_grid = classifiers[classifier]
+    pipeline = pipe(classifier)
+    evaluation = GridSearchCV(pipeline, param_grid, scoring = 'recall', refit=True, n_jobs=-1, verbose = 2)
+    evaluation.fit(X,Y)
+    return evaluation.best_estimator_
+
+from main import classification
