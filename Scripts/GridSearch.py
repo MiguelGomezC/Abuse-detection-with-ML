@@ -29,7 +29,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from sklearn.naive_bayes import MultinomialNB
-from sklearn.model_selection import GridSearchCV #REFIT=TRUE?
+from sklearn.model_selection import GridSearchCV
 #probar gradient boost, adaptative boost
 
 def pipe(obj):
