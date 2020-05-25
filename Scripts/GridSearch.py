@@ -42,9 +42,6 @@ classifiers = {'LogisticRegression': {'classifier':[LogisticRegression()], 'clas
                'SVC': {'classifier': [SVC()],'classifier__C':[1,10,100,1000],'classifier__gamma':[1,0.1,0.001,0.0001], 'classifier__kernel':['linear','rbf']},\
                'RandomForestClassifier':{'classifier':[RandomForestClassifier()],'classifier__bootstrap': [True],'classifier__max_depth': [80, 90, 100, 110], 'classifier__max_features': [2, 3],'classifier__min_samples_leaf': [3, 4, 5],'classifier__min_samples_split': [8, 10, 12],'classifier__n_estimators': [100, 200, 300, 1000]}}
 
-from sklearn.model_selection import StratifiedKFold
-from sklearn.metrics import precision_score, recall_score, f1_score
-
 def grid_search(classifier):
     """
     (Returns best estimator)
