@@ -1,4 +1,4 @@
-#Archivo para crear un nuevo corpus de respuestas y quotes de varias horas del día
+#Archivo para crear un nuevo corpus de respuestas de varias horas del día
 
 import json
 from random import sample
