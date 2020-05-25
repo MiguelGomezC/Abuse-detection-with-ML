@@ -47,7 +47,8 @@ def grid_search(classifier):
     (Returns best estimator)
     --NO RESAMPLING--
     """
-    param_grid = classifiers[classifier]
+    param_grid = transformerparams
+    param_grid.update(classifiers[classifier])
     pipeline = pipe(classifier)
     evaluation = GridSearchCV(pipeline, param_grid, scoring = 'recall', refit=True, n_jobs=-1, verbose = 2)
     evaluation.fit(X,Y)
