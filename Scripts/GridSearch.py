@@ -38,17 +38,17 @@ def pipe(obj):
 
 classifiers = {'LogisticRegression': {'classifier':[LogisticRegression()], 'classifier__penalty' : ['l1', 'l2'], 'classifier_C' : np.logspace(-4, 4, 20)},\
                'MultinomialNB': {'classifier': [MultinomialNB()], 'classifier__alpha': [0.01, 0.1, 1.0]},\
-               'KNeigboursClassifier': {'classifier': [KNeighborsClassifier()], 'classifier__n_neighbors': [3, 7, 10, 20, 30, 40, 50], 'classifier__weights': ['uniform', 'distance']},\
+               'KNeighborsClassifier': {'classifier': [KNeighborsClassifier()], 'classifier__n_neighbors': [1,3,5,7,10,13,15,20,25,30], 'classifier__weights': ['uniform', 'distance']},\
                'SVC': {'classifier': [SVC()],'classifier__C':[1,10,100,1000],'classifier__gamma':[1,0.1,0.001,0.0001], 'classifier__kernel':['linear','rbf']},\
                'RandomForestClassifier':{'classifier':[RandomForestClassifier()],'classifier__bootstrap': [True],'classifier__max_depth': [80, 90, 100, 110], 'classifier__max_features': [2, 3],'classifier__min_samples_leaf': [3, 4, 5],'classifier__min_samples_split': [8, 10, 12],'classifier__n_estimators': [100, 200, 300, 1000]}}
-
+#SVC: recall: C=10, gamma = 1,  kernel='linear'; accuracy: C=100, gamma=1, kernel = 'linear'
+#MultinomialNB: accuracy: alpha = 1; recall: alpha = 0.01
 def grid_search(classifier):
     """
     (Returns best estimator)
     --NO RESAMPLING--
     """
-    param_grid = transformerparams
-    param_grid.update(classifiers[classifier])
+    param_grid = (classifiers[classifier])
     pipeline = pipe(classifier)
     evaluation = GridSearchCV(pipeline, param_grid, scoring = 'recall', refit=True, n_jobs=-1, verbose = 2)
     evaluation.fit(X,Y)
