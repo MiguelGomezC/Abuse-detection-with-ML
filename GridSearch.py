@@ -30,6 +30,8 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.model_selection import GridSearchCV
+
+from sklearn.ensemble import GradientBoostingClassifier
 #probar gradient boost, adaptative boost
 
 def pipe(obj):
@@ -50,7 +52,7 @@ def grid_search(classifier):
     """
     param_grid = (classifiers[classifier])
     pipeline = pipe(classifier)
-    evaluation = GridSearchCV(pipeline, param_grid, scoring = 'recall', refit=True, n_jobs=-1, verbose = 2)
+    evaluation = GridSearchCV(pipeline, param_grid, scoring = 'precision', refit=True, n_jobs=-1, verbose = 2)
     evaluation.fit(X,Y)
     return evaluation.best_estimator_
 
