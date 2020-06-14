@@ -57,9 +57,9 @@ def classification(pipeline, title, n_splits=5, X=X, Y=Y, average_method = 'macr
     report = classification_report(y_values,predictions,output_dict=True)
     dataframe = pd.DataFrame(report).transpose()
     results_dir ='Reportes de clasificación'
-    with open(f"{results_dir}/{title}.tex", 'a') as fichero:
+    with open(f"{results_dir}/{title}.tex", 'w') as fichero:
         fichero.write(title+'\n')
-        fichero.write(df.to_latex())
+        fichero.write(dataframe.to_latex())
     
     print("accuracy: %.2f%% (+/- %.2f%%)" % (np.mean(accuracy), np.std(accuracy)))
     print("precision: %.2f%% (+/- %.2f%%)" % (np.mean(precision), np.std(precision)))
@@ -96,7 +96,7 @@ if __name__ == "__main__":
     methods = joblib.load('Resultados Gridsearch\imb_params.pkl')
     for method, score in methods:
         title = str(method['classifier']).split('(')[0]
-        input('Presione enter para aplicar el siguiente método')
+        #input('Presione enter para aplicar el siguiente método')
         print('Se está evaluando el método', title,'\nObtuvo una puntuación de ',score,' en la búsqueda de rejilla.\n')
         classification(SMOTE_pipeline(method['classifier']) ,title)
         print('\n')
