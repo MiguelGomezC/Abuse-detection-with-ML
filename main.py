@@ -46,7 +46,7 @@ def classification(pipeline, title, n_splits=5, X=X, Y=Y, average_method = 'macr
         print('-'*50)
 
     frame = pd.DataFrame({'y_Actual':y_values,'y_Predicted':predictions}, columns = ['y_Actual','y_Predicted'])
-    confusion_matrix = pd.crosstab(frame['y_Actual'], frame['y_Predicted'], rownames=['Actual'], colnames=['Predicted'], normalize=True)
+    confusion_matrix = pd.crosstab(frame['y_Actual'], frame['y_Predicted'], rownames=['Actual'], colnames=['Predicted'], normalize='index')
     sn.heatmap(confusion_matrix, annot=True)
     plt.title(title)
     fig = plt.gcf()
