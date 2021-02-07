@@ -5,11 +5,7 @@ import seaborn as sn
 import matplotlib.pyplot as plt
 import json
 
-with open('clean_data','r') as fichero:
-    data = json.load(fichero)
-df = pd.DataFrame(data, columns = ["text","time_feature", "sentiment"])
-X = df[['text','time_feature']]
-Y = df['sentiment']
+cereal_df = pd.read_csv("/tmp/tmp07wuam09/data/cereal.csv")
 
 from sklearn.model_selection import StratifiedKFold
 from sklearn.metrics import precision_score, recall_score, f1_score
